@@ -6,13 +6,24 @@ const openai = new OpenAI({
 
 exports.handler = async function(event) {
   try {
-    console.log("Request body:", event.body);
+    console.log("Function triggered");
+    console.log("Event body:", event.body);
+
+    if (!process.env.OPENAI_API_KEY) {
+      throw new Error("OPENAI_API_KEY is missing!");
+    }
+
+    if (!event.body) {
+      throw new Error("No body in request!");
+    }
 
     const { message } = JSON.parse(event.body);
 
-    if (!message) throw new Error("No message provided");
+    if (!message) {
+      throw new Error("No message provided in request!");
+    }
 
-    // Test OpenAI response
+    // Call OpenAI API
     const response = await openai.chat.completions.create({
       model: "gpt-4o-mini",
       messages: [{ role: "user", content: message }]
@@ -26,7 +37,7 @@ exports.handler = async function(event) {
     };
 
   } catch (err) {
-    console.error(err); // logs show in Netlify dashboard
+    console.error("Error in function:", err);
     return {
       statusCode: 500,
       body: JSON.stringify({ error: err.message })
