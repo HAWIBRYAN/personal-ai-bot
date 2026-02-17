@@ -1,18 +1,7 @@
 {
-  "name": "personal-ai-bot",
+  "name": "hawi-bot",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
   "dependencies": {
-    "@octokit/rest": "^22.0.1",
-    "cosine-similarity": "^1.0.1",
-    "openai": "^6.22.0"
+    "openai": "^4.25.0"
   }
 }

@@ -1,10 +1,11 @@
-const { OpenAI } = require("openai");
-const fetch = require("node-fetch");
+kkconst { OpenAI } = require("openai");
 
+// Initialize OpenAI
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
 });
 
+// Your profile knowledge base
 const knowledgeBase = [
   {
     topic: "projects",
@@ -24,6 +25,7 @@ const knowledgeBase = [
   }
 ];
 
+// Simple keyword matching
 function findBestMatch(message) {
   const lowerMessage = message.toLowerCase();
   let bestMatch = null;
@@ -31,13 +33,10 @@ function findBestMatch(message) {
 
   knowledgeBase.forEach(entry => {
     let currentScore = 0;
-
     entry.topic.split(" ").forEach(word => {
       if (lowerMessage.includes(word)) currentScore++;
     });
-
     if (lowerMessage.includes(entry.topic)) currentScore += 2;
-
     if (currentScore > score) {
       score = currentScore;
       bestMatch = entry;
@@ -47,29 +46,58 @@ function findBestMatch(message) {
   return score > 0 ? bestMatch.content : null;
 }
 
+// Fetch latest GitHub repos using native fetch
+async function fetchGitHubRepos(username, token) {
+  const res = await fetch(`https://api.github.com/users/${username}/repos`, {
+    headers: token ? { Authorization: `token ${token}` } : {}
+  });
+  if (!res.ok) throw new Error(`GitHub API error: ${res.status}`);
+  const data = await res.json();
+
+  return data
+    .sort((a,b) => new Date(b.updated_at) - new Date(a.updated_at))
+    .slice(0,5)
+    .map(repo => `• ${repo.name} (${repo.language || "Unknown"})`)
+    .join("\n");
+}
+
+// Netlify function handler
 exports.handler = async function(event) {
   try {
     if (!event.body) throw new Error("No request body");
     const { message } = JSON.parse(event.body);
     if (!message) throw new Error("No message provided");
 
-    // 🧠 Try semantic match first
+    const lowerMessage = message.toLowerCase();
+
+    // 1️⃣ Check knowledge base first
     const matched = findBestMatch(message);
     if (matched) {
-      return {
-        statusCode: 200,
-        body: JSON.stringify({ reply: matched })
-      };
+      return { statusCode: 200, body: JSON.stringify({ reply: matched }) };
     }
 
-    // 🤖 Only call OpenAI if no match
+    // 2️⃣ Check for GitHub projects request
+    if (lowerMessage.includes("project")) {
+      try {
+        const username = "HAWIBRYAN"; // replace with your GitHub username
+        const token = process.env.GITHUB_TOKEN; // optional
+        const repos = await fetchGitHubRepos(username, token);
+        return {
+          statusCode: 200,
+          body: JSON.stringify({ reply: `Here are my latest GitHub projects:\n${repos}` })
+        };
+      } catch (err) {
+        console.error("GitHub fetch error:", err);
+        return {
+          statusCode: 200,
+          body: JSON.stringify({ reply: "Couldn't reach GitHub 😅 Check my profile directly!" })
+        };
+      }
+    }
+
+    // 3️⃣ Otherwise call OpenAI
     if (!process.env.OPENAI_API_KEY) {
-      return {
-        statusCode: 200,
-        body: JSON.stringify({
-          reply: "I don't have AI enabled right now, but feel free to ask about my skills, projects, or education!"
-        })
-      };
+      return { statusCode: 200, body: JSON.stringify({ reply: "AI not enabled 😅" }) };
     }
 
     const response = await openai.chat.completions.create({
@@ -77,21 +105,16 @@ exports.handler = async function(event) {
       messages: [{ role: "user", content: message }]
     });
 
-    return {
-      statusCode: 200,
-      body: JSON.stringify({
-        reply: response.choices[0].message.content
-      })
-    };
+    const reply = response.choices[0].message.content;
+
+    return { statusCode: 200, body: JSON.stringify({ reply }) };
 
   } catch (err) {
-    console.error(err);
-
+    console.error("Error:", err);
     return {
       statusCode: 200,
-      body: JSON.stringify({
-        reply: "Something went wrong 😅 Please try again later."
-      })
+      body: JSON.stringify({ reply: "Something went wrong 😅 Please try again later." })
     };
   }
 };
+
