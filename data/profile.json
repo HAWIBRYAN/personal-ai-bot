@@ -1,0 +1,110 @@
+{
+  "name": "Omondi Bryan Hawi",
+  "preferred_name": "Hawi Bryan",
+  "location": "Nairobi, Kenya",
+  "contact": {
+    "email": "hawibryan04@gmail.com",
+    "github": "github.com/HAWIBRYAN"
+  },
+  "professional_summary": "IT graduate and full-stack developer passionate about scalable apps, AI integration, and solving real-world problems through code. Comfortable across frontend, backend, mobile, and systems design, with exposure to enterprise IT and open-source contributions.",
+  "education": {
+    "institution": "Jomo Kenyatta University of Agriculture and Technology (JKUAT)",
+    "degree": "Bachelor of Science in Information Technology",
+    "graduation_year": 2025
+  },
+  "certifications": [
+    {
+      "name": "Google Cybersecurity Certificate",
+      "provider": "Coursera",
+      "year": 2025
+    }
+  ],
+  "experience": [
+    {
+      "organization": "Kenya Power & Lighting Company (KPLC)",
+      "role": "IT Attachee",
+      "period": "Sep 2025 - Nov 2025",
+      "focus_areas": [
+        "IT support and troubleshooting",
+        "Hardware/software maintenance",
+        "Network and user support"
+      ]
+    },
+    {
+      "organization": "Centrino Technologies Limited",
+      "role": "IT Intern",
+      "period": "Aug 2023 - Dec 2023",
+      "focus_areas": [
+        "SQL database management",
+        "Technical documentation",
+        "Data performance optimization"
+      ]
+    }
+  ],
+  "major_projects": [
+    {
+      "name": "Car Hire Services Management System",
+      "description": "Full-stack web and mobile app for booking and managing car rentals (featured on GitHub), built with React, Flutter, Node.js/Django and Supabase.",
+      "tech_stack": ["React", "Flutter", "Node.js", "Django", "MySQL", "Supabase"]
+    },
+    {
+      "name": "Bulk SMS Platform",
+      "description": "System for sending and managing SMS campaigns with analytics and delivery reports — part of your portfolio showcased on GitHub.",
+      "tech_stack": ["Rust", "Axum", "React"]
+    },
+    {
+      "name": "AI Chatbot",
+      "description": "Customer support chatbot with natural language processing integrated into your portfolio.",
+      "tech_stack": ["Python", "JavaScript", "AI/ML tools"]
+    },
+    {
+      "name": "ERP System",
+      "description": "Simple enterprise resource planning system demonstrating core backend and business logic skills.",
+      "tech_stack": ["Laravel", "PHP"]
+    },
+    {
+      "name": "Rust SMS Gateway",
+      "description": "Rust-powered SMS gateway integrating with Taifa Mobile API — full backend service with modern stack.",
+      "tech_stack": ["Rust", "Axum", "React"]
+    },
+    {
+      "name": "SimpleTaskManager",
+      "description": "Task management system built with PHP for basic productivity tracking and workflows."
+    }
+  ],
+  "technical_skills": {
+    "programming_languages": ["JavaScript", "Python", "PHP", "Rust"],
+    "frontend": ["React", "TailwindCSS"],
+    "mobile": ["Flutter"],
+    "backend": ["Node.js", "Django", "Laravel", "Axum (Rust)"],
+    "databases": ["MySQL", "PostgreSQL", "Supabase", "Firebase"],
+    "cloud_tools": ["AWS", "Docker"],
+    "cybersecurity": ["Wireshark", "Nmap", "Kali Linux tools"]
+  },
+  "github_activity": {
+    "followers": 1,
+    "following": 1,
+    "stars": 4,
+    "pinned_repositories_count": 4,
+    "profile_readme_highlights": [
+      "Passionate about building scalable apps",
+      "Exploring AI, DevOps, and cloud-native apps",
+      "Open to collaboration and innovation"
+    ]
+  },
+  "core_strengths": [
+    "Full-stack development",
+    "API design and integration",
+    "Cloud and DevOps workflows",
+    "Mobile app development",
+    "Security-aware software engineering"
+  ],
+  "interests": [
+    "AI integration and machine learning",
+    "Cloud-native and DevOps ecosystems",
+    "Open-source contribution",
+    "System architecture and scalable design",
+    "Mobile and backend engineering"
+  ],
+  "career_direction": "Aspiring full-stack engineer focusing on AI-driven and cloud-native applications while expanding contributions to open-source and modern backend systems."
+}
