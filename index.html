@@ -1,29 +1,156 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hawi AI</title>
+  <style>
+    /* Reset */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f5f6fa;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      height: 100vh;
+    }
+
+    h1 {
+      margin: 20px 0;
+      color: #2f3640;
+      font-size: 2rem;
+    }
+
+    #chat-container {
+      width: 90%;
+      max-width: 600px;
+      background: #ffffff;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+      overflow-y: auto;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .message {
+      max-width: 80%;
+      padding: 12px 16px;
+      border-radius: 16px;
+      word-wrap: break-word;
+      line-height: 1.4;
+    }
+
+    .user {
+      background: #4cd137;
+      color: white;
+      align-self: flex-end;
+      border-bottom-right-radius: 4px;
+    }
+
+    .bot {
+      background: #dcdde1;
+      color: #2f3640;
+      align-self: flex-start;
+      border-bottom-left-radius: 4px;
+    }
+
+    #input-container {
+      display: flex;
+      width: 90%;
+      max-width: 600px;
+      margin-bottom: 20px;
+    }
+
+    #question {
+      flex-grow: 1;
+      padding: 12px 16px;
+      border-radius: 12px 0 0 12px;
+      border: 1px solid #dcdde1;
+      font-size: 1rem;
+      outline: none;
+    }
+
+    #send-btn {
+      padding: 12px 20px;
+      background: #40739e;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 0 12px 12px 0;
+      transition: background 0.3s;
+    }
+
+    #send-btn:hover {
+      background: #2f3640;
+    }
+
+    /* Scrollbar */
+    #chat-container::-webkit-scrollbar {
+      width: 6px;
+    }
+    #chat-container::-webkit-scrollbar-thumb {
+      background: #95a5a6;
+      border-radius: 3px;
+    }
+  </style>
 </head>
 <body>
-  <h1>Ask Me About Hawi</h1>
 
-  <input type="text" id="question" placeholder="Ask something..." />
-  <button onclick="send()">Send</button>
+  <h1>Hawi AI</h1>
 
-  <p id="response"></p>
+  <div id="chat-container">
+    <!-- messages will appear here -->
+  </div>
+
+  <div id="input-container">
+    <input type="text" id="question" placeholder="Ask me anything..." />
+    <button id="send-btn">Send</button>
+  </div>
 
   <script>
-    async function send() {
-      const message = document.getElementById("question").value;
+    const chatContainer = document.getElementById('chat-container');
+    const questionInput = document.getElementById('question');
+    const sendBtn = document.getElementById('send-btn');
 
-      const res = await fetch("/.netlify/functions/chat", {
-        method: "POST",
-        body: JSON.stringify({ message })
-      });
-
-      const data = await res.json();
-      document.getElementById("response").innerText = data.reply;
+    function addMessage(text, sender) {
+      const msg = document.createElement('div');
+      msg.classList.add('message', sender);
+      msg.textContent = text;
+      chatContainer.appendChild(msg);
+      chatContainer.scrollTop = chatContainer.scrollHeight;
     }
+
+    async function sendMessage() {
+      const message = questionInput.value.trim();
+      if (!message) return;
+      addMessage(message, 'user');
+      questionInput.value = '';
+
+      try {
+        const res = await fetch('/.netlify/functions/chat', {
+          method: 'POST',
+          body: JSON.stringify({ message })
+        });
+        const data = await res.json();
+        addMessage(data.reply, 'bot');
+      } catch (err) {
+        addMessage("Error: Could not reach AI server.", 'bot');
+        console.error(err);
+      }
+    }
+
+    sendBtn.addEventListener('click', sendMessage);
+    questionInput.addEventListener('keypress', e => {
+      if (e.key === 'Enter') sendMessage();
+    });
   </script>
+
 </body>
 </html>
-
