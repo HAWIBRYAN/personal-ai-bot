@@ -6,204 +6,188 @@
 <title>Hawi AI</title>
 
 <style>
-  :root {
-    --bg-light: #fafafa;
-    --bg-dark: #1e1e2f;
-    --chat-light: #ffffff;
-    --chat-dark: #2c2c3e;
-    --text-light: #333;
-    --text-dark: #eee;
-    --user-light: #4a90e2;
-    --user-dark: #50c9c3;
-    --bot-light: #eef1f6;
-    --bot-dark: #3a3a4a;
-  }
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
-  body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Poppins', sans-serif;
-    background: var(--bg-light);
-    color: var(--text-light);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    transition: background 0.3s, color 0.3s;
-  }
+:root {
+  --bg-dark: #10101a;
+  --panel-bg: rgba(30,30,35,0.7);
+  --panel-blur: 18px;
+  --user-color: rgba(70,180,220,0.8);
+  --bot-color: rgba(100,100,120,0.5);
+  --text-light: #eaeaea;
+  --accent-glow: rgba(70,180,220,0.35);
+  --metallic-border: rgba(180,180,200,0.15);
+}
 
-  header {
-    width: 100%;
-    text-align: center;
-    padding: 40px 0;
-    background: linear-gradient(135deg, #4a90e2, #50c9c3);
-    color: white;
-    font-size: 2rem;
-    font-weight: bold;
-    box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-  }
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(145deg, #0d0d0d, #1a1a20);
+  color: var(--text-light);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+}
 
-  #dark-toggle {
-    cursor: pointer;
-    background: rgba(255,255,255,0.2);
-    border: none;
-    color: white;
-    font-weight: bold;
-    padding: 6px 12px;
-    border-radius: 12px;
-    transition: background 0.3s;
-  }
+header {
+  width: 100%;
+  text-align: center;
+  padding: 30px 0;
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--text-light);
+  text-shadow: 0 0 10px rgba(70,180,220,0.3);
+}
 
-  #dark-toggle:hover {
-    background: rgba(255,255,255,0.4);
-  }
+#chat-wrapper {
+  width: 90%;
+  max-width: 700px;
+  flex: 1;
+  margin-bottom: 20px;
+  background: var(--panel-bg);
+  backdrop-filter: blur(var(--panel-blur));
+  border-radius: 22px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow-y: auto;
+  border: 1px solid var(--metallic-border);
+  box-shadow: 0 0 30px rgba(0,0,0,0.5);
+}
 
-  #chat-wrapper {
-    width: 90%;
-    max-width: 700px;
-    background: var(--chat-light);
-    margin-top: -30px;
-    padding: 20px;
-    border-radius: 16px;
-    box-shadow: 0px 6px 20px rgba(0,0,0,0.08);
-    display: flex;
-    flex-direction: column;
-    height: calc(100vh - 200px);
-    overflow-y: auto;
-    gap: 10px;
-    transition: background 0.3s;
-  }
+.bubble {
+  max-width: 75%;
+  padding: 14px 20px;
+  border-radius: 18px;
+  font-size: 1rem;
+  line-height: 1.4;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: bubbleIn 0.3s forwards;
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--metallic-border);
+}
 
-  .bubble {
-    max-width: 80%;
-    padding: 12px 18px;
-    border-radius: 18px;
-    font-size: 1rem;
-    line-height: 1.4;
-    opacity: 0;
-    transform: translateY(20px);
-    animation: bubbleIn 0.3s forwards;
-  }
+@keyframes bubbleIn {
+  to { opacity: 1; transform: translateY(0); }
+}
 
-  @keyframes bubbleIn {
-    to { opacity: 1; transform: translateY(0); }
-  }
+.bubble.user {
+  background: var(--user-color);
+  color: #fff;
+  align-self: flex-end;
+  border-bottom-right-radius: 4px;
+  box-shadow: 0 0 12px var(--accent-glow);
+}
 
-  .bubble.user {
-    background: var(--user-light);
-    color: white;
-    align-self: flex-end;
-    border-bottom-right-radius: 4px;
-    transition: background 0.3s;
-  }
+.bubble.bot {
+  background: var(--bot-color);
+  color: var(--text-light);
+  align-self: flex-start;
+  border-bottom-left-radius: 4px;
+  box-shadow: 0 0 8px rgba(70,70,100,0.25);
+}
 
-  .bubble.bot {
-    background: var(--bot-light);
-    color: var(--text-light);
-    align-self: flex-start;
-    border-bottom-left-radius: 4px;
-    transition: background 0.3s, color 0.3s;
-  }
+#input-area {
+  width: 90%;
+  max-width: 700px;
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
 
-  #input-area {
-    display: flex;
-    width: 90%;
-    max-width: 700px;
-    margin-top: auto;
-    padding: 12px 0;
-    gap: 10px;
-  }
+#question {
+  flex: 1;
+  padding: 14px 18px;
+  font-size: 1rem;
+  border-radius: 24px;
+  border: 1px solid var(--metallic-border);
+  outline: none;
+  background: rgba(50,50,60,0.6);
+  color: var(--text-light);
+  backdrop-filter: blur(6px);
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
+}
 
-  #question {
-    flex: 1;
-    padding: 12px 16px;
-    font-size: 1rem;
-    border-radius: 24px;
-    border: 1px solid #ddd;
-    outline: none;
-    transition: background 0.3s, color 0.3s, border 0.3s;
-  }
+#send-btn {
+  padding: 14px 24px;
+  border: none;
+  border-radius: 24px;
+  background: var(--user-color);
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+  box-shadow: 0 0 8px var(--accent-glow);
+}
 
-  #send-btn {
-    padding: 12px 24px;
-    background: #50c9c3;
-    border: none;
-    color: white;
-    font-weight: bold;
-    border-radius: 24px;
-    cursor: pointer;
-    transition: 0.2s ease;
-  }
+#send-btn:hover {
+  box-shadow: 0 0 16px var(--accent-glow);
+}
 
-  #send-btn:hover { background: #4a90e2; }
+#typing-indicator {
+  font-style: italic;
+  font-size: 0.9rem;
+  color: #aaa;
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
 
-  #typing-indicator {
-    font-style: italic;
-    font-size: 0.9rem;
-    color: #888;
-    display: none;
-    padding-left: 10px;
-  }
+.dot {
+  width: 6px;
+  height: 6px;
+  background: var(--accent-glow);
+  border-radius: 50%;
+  animation: bounce 1s infinite;
+}
 
-  /* Typing dots animation */
-  .dot {
-    display: inline-block;
-    width: 6px;
-    height: 6px;
-    margin: 0 2px;
-    background-color: #888;
-    border-radius: 50%;
-    animation: bounce 1s infinite;
-  }
-  .dot:nth-child(2) { animation-delay: 0.2s; }
-  .dot:nth-child(3) { animation-delay: 0.4s; }
+.dot:nth-child(2) { animation-delay: 0.2s; }
+.dot:nth-child(3) { animation-delay: 0.4s; }
 
-  @keyframes bounce {
-    0%, 80%, 100% { transform: scale(0); }
-    40% { transform: scale(1); }
-  }
+@keyframes bounce {
+  0%, 80%, 100% { transform: scale(0); }
+  40% { transform: scale(1); }
+}
 
-  #suggestions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 10px;
-  }
+#suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
 
-  .chip {
-    background: #dcdde1;
-    padding: 6px 12px;
-    border-radius: 20px;
-    cursor: pointer;
-    transition: 0.2s;
-  }
+.chip {
+  padding: 8px 14px;
+  border-radius: 20px;
+  background: rgba(70,70,80,0.4);
+  color: #eee;
+  cursor: pointer;
+  transition: 0.2s;
+  backdrop-filter: blur(6px);
+  border: 1px solid var(--metallic-border);
+}
 
-  .chip:hover { background: #b0c4de; }
-
-  /* Dark mode overrides */
-  body.dark {
-    background: var(--bg-dark);
-    color: var(--text-dark);
-  }
-  body.dark #chat-wrapper { background: var(--chat-dark); }
-  body.dark .bubble.bot { background: var(--bot-dark); color: var(--text-dark); }
-  body.dark #question { background: #3a3a4a; color: #eee; border: 1px solid #555; }
+.chip:hover {
+  background: rgba(70,180,220,0.35);
+  box-shadow: 0 0 8px var(--accent-glow);
+}
 </style>
 </head>
-
 <body>
-<header>
-  Talk to Hawi's AI
-  <button id="dark-toggle">🌙</button>
-</header>
+
+<header>Hawi AI</header>
 
 <div id="chat-wrapper"></div>
 
-<div id="typing-indicator">
-  Hawi is typing <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+<div id="typing-indicator" style="display:none;">
+  Hawi is typing 
+  <span class="dot"></span>
+  <span class="dot"></span>
+  <span class="dot"></span>
 </div>
 
 <div id="suggestions">
@@ -214,66 +198,43 @@
 </div>
 
 <div id="input-area">
-  <input id="question" type="text" placeholder="Ask anything about my projects, resume..." />
+  <input id="question" type="text" placeholder="Ask me anything..." />
   <button id="send-btn">Send</button>
 </div>
 
 <script>
-  const chatWrapper = document.getElementById('chat-wrapper');
-  const input = document.getElementById('question');
-  const sendBtn = document.getElementById('send-btn');
-  const typingIndicator = document.getElementById('typing-indicator');
-  const suggestionChips = document.querySelectorAll('.chip');
-  const darkToggle = document.getElementById('dark-toggle');
+const chatWrapper = document.getElementById('chat-wrapper');
+const input = document.getElementById('question');
+const sendBtn = document.getElementById('send-btn');
+const typingIndicator = document.getElementById('typing-indicator');
+const chips = document.querySelectorAll('.chip');
 
-  // Dark mode toggle
-  darkToggle.addEventListener('click', () => {
-    document.body.classList.toggle('dark');
-  });
+function addMessage(text, sender) {
+  const div = document.createElement('div');
+  div.classList.add('bubble', sender);
+  div.textContent = text;
+  chatWrapper.appendChild(div);
+  chatWrapper.scrollTop = chatWrapper.scrollHeight;
+}
 
-  function addMessage(text, sender) {
-    const div = document.createElement('div');
-    div.classList.add('bubble', sender);
-    div.textContent = text;
-    chatWrapper.appendChild(div);
-    chatWrapper.scrollTop = chatWrapper.scrollHeight;
-  }
+async function sendMessage(message) {
+  if(!message) return;
+  addMessage(message, 'user');
+  input.value = '';
+  typingIndicator.style.display = 'flex';
 
-  async function sendMessage(message) {
-    if (!message) return;
-    addMessage(message, 'user');
-    input.value = '';
+  // simulate API call
+  setTimeout(()=>{
+    typingIndicator.style.display = 'none';
+    addMessage("This is a sleek metallic reply!", 'bot');
+  }, 1000);
+}
 
-    // Show typing animation
-    typingIndicator.style.display = 'block';
-
-    try {
-      const res = await fetch('/.netlify/functions/chat', {
-        method: 'POST',
-        body: JSON.stringify({ message })
-      });
-      const data = await res.json();
-
-      typingIndicator.style.display = 'none';
-      addMessage(data.reply, 'bot');
-
-      // Auto-scroll to latest message
-      chatWrapper.scrollTop = chatWrapper.scrollHeight;
-    } catch (err) {
-      typingIndicator.style.display = 'none';
-      addMessage("Oops, something went wrong.", "bot");
-      console.error(err);
-    }
-  }
-
-  sendBtn.addEventListener('click', () => sendMessage(input.value.trim()));
-  input.addEventListener('keypress', e => { if (e.key === 'Enter') sendMessage(input.value.trim()); });
-
-  // Suggestion chips
-  suggestionChips.forEach(chip => {
-    chip.addEventListener('click', () => sendMessage(chip.textContent));
-  });
+sendBtn.addEventListener('click', ()=>sendMessage(input.value.trim()));
+input.addEventListener('keypress', e=>{ if(e.key==='Enter') sendMessage(input.value.trim())});
+chips.forEach(chip => chip.addEventListener('click', ()=>sendMessage(chip.textContent)));
 </script>
+
 </body>
 </html>
 
